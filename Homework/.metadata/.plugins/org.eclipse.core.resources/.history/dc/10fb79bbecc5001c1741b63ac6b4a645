@@ -1,0 +1,88 @@
+package hw7;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+
+public class CampusPaths {
+	public static void readNodeData(String filename, HashMap<String, String> name_id, HashMap<String, Location> id_coordinate) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String line = null;
+	    while ((line = reader.readLine()) != null)
+	    {
+	         Object[] sample = line.split(",");
+	         if (sample.length != 4) {
+	        	 throw new IOException("File "+filename+" not a CSV file.");
+	         }
+	         String name = (String)sample[0];
+	         if(name.equals(""))
+	        	 name = "Intersection";
+	         int id = (int)sample[1];
+	         name_id.putIfAbsent(name, id);
+	         double x = Double.parseDouble(sample[2]);
+	         double y = Double.parseDouble(sample[3]);
+	         id_coordinate.putIfAbsent(id, new Location(name, id, x, y));
+	    }
+	    reader.close();
+	}
+
+	public static void readEdgeData(String filename, HashMap<String, String> id_id) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String line = null;
+	    while ((line = reader.readLine()) != null)
+	    {
+	         String[] sample = line.split(",");
+	         if (sample.length != 2)
+	        	 throw new IOException("File "+filename+" not a CSV file.");
+	         String id1 = sample[0];
+	         String id2 = sample[1];
+	         id_id.putIfAbsent(id1, id2);
+	    }
+	    reader.close();
+	}
+	
+	public static void main(String[] argv) {
+		String menu = "Menu:\n"
+				+ "b: get a list of all buildings\n"
+				+ "r: given two builds, prints directions for the shortest route between them\n"
+				+ "q: quits the program\n"
+				+ "m: prints a menu of all commands\n";
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String input = reader.readLine();
+		while (!input.equals("q")) {
+			try {
+				input = reader.readLine();
+			} catch (IOException e) {
+				break;
+			}
+			if (input.equals("b")) {
+				rpi.listBuildings();
+			} else if(input.equals("r")) {
+				String source;
+				String destination;
+				System.out.print("First building id/name, followed by Enter: ");
+				try {
+					source = reader.readLine();
+				} catch (IOException e) {
+					break;
+				}
+				System.out.print("Second building id/name, followed by Enter: ");
+				try {
+					destination = reader.readLine();
+				} catch (IOException e) {
+					break;
+				}
+				System.out.print(rpi.findPath(source, destination));
+			} else if (input.equals("q")) {
+				break;
+			} else if (input.equals("m")) {
+				System.out.print(menu);
+			} else {
+				System.out.print("Unknown option\n");
+			}
+		}
+		return;
+	}
+}

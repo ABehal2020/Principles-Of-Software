@@ -1,0 +1,53 @@
+package hw4;
+
+import java.util.Objects;
+
+public class Node {
+	private final String name;
+	private final int hashCode;
+	/*
+	 * Abstraction Function
+	 * Represents a node in the graph
+	 * No node may be null.
+	 */
+	public Node(String nameIn) {
+		this.name = nameIn;
+		// This implementation comes from
+	    // http://www.partow.net/programming/hashfunctions/
+		int hash = 1315423911;
+		int hashValue = 0;
+		for (int i = 0; i < this.name.length(); i++) {
+			hashValue ^= ((hash << 5) + this.name.charAt(i) + (hash >> 2));
+		}
+		this.hashCode = hashValue;
+		// this.checkRep();
+	}
+	public Node(Node vertex) {
+		this.name = vertex.name;
+		this.hashCode = vertex.hashCode;
+		// this.checkRep();
+	}
+	private void checkRep() {
+		if (this.name == null){
+            throw new RuntimeException("Failed rep check - name field is null");
+        }
+	}
+	public String getName() {
+		return this.name;
+	}
+	@Override
+	public int hashCode() {
+		return this.hashCode;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Node other = (Node) obj;
+		return Objects.equals(name, other.name);
+	}
+}

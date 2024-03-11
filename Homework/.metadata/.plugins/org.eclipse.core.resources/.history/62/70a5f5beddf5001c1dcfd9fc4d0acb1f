@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_ZtQFYPXLEeynBMiF74xCrA" name="src">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_Zv7l8PXLEeynBMiF74xCrA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_0atTkPXYEeyiA_wRv_fqYw" name="Company">
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_Et_74PXZEeyiA_wRv_fqYw" name="createComputer(): Computer"/>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_JryEgPXZEeyiA_wRv_fqYw" name="createHeadphones(): Headphones"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_LfuuYPXZEeyiA_wRv_fqYw" name="SurfacePro">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_xqo4UPXbEeyiA_wRv_fqYw" client="_LfuuYPXZEeyiA_wRv_fqYw" supplier="_lVrjQPXaEeyiA_wRv_fqYw" contract="_lVrjQPXaEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_NMd9APXZEeyiA_wRv_fqYw" name="MacBookPro">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_ECCGYPXcEeyiA_wRv_fqYw" client="_NMd9APXZEeyiA_wRv_fqYw" supplier="_lVrjQPXaEeyiA_wRv_fqYw" contract="_lVrjQPXaEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ncPckPXZEeyiA_wRv_fqYw" name="Microsoft">
+    <generalization xmi:type="uml:Generalization" xmi:id="_TXAXMPXaEeyiA_wRv_fqYw" general="_0atTkPXYEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_oi2fUPXZEeyiA_wRv_fqYw" name="Apple">
+    <generalization xmi:type="uml:Generalization" xmi:id="_V0Ig8PXaEeyiA_wRv_fqYw" general="_0atTkPXYEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_lVrjQPXaEeyiA_wRv_fqYw" name="Computer">
+    <generalization xmi:type="uml:Generalization" xmi:id="_6Tnq4PXcEeyiA_wRv_fqYw" general="_rbL3APXcEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ovBdoPXaEeyiA_wRv_fqYw" name="AirPodsMax">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_s-He0PXbEeyiA_wRv_fqYw" client="_ovBdoPXaEeyiA_wRv_fqYw" supplier="_u_jAgPXaEeyiA_wRv_fqYw" contract="_u_jAgPXaEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_q0CCUPXaEeyiA_wRv_fqYw" name="SurfaceHeadphones">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_vdQawPXbEeyiA_wRv_fqYw" client="_q0CCUPXaEeyiA_wRv_fqYw" supplier="_u_jAgPXaEeyiA_wRv_fqYw" contract="_u_jAgPXaEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_u_jAgPXaEeyiA_wRv_fqYw" name="Headphones">
+    <generalization xmi:type="uml:Generalization" xmi:id="_BUg6wPXdEeyiA_wRv_fqYw" general="_rbL3APXcEeyiA_wRv_fqYw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_rbL3APXcEeyiA_wRv_fqYw" name="Product">
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_uBUy0PXcEeyiA_wRv_fqYw" name="build"/>
+  </packagedElement>
+</uml:Model>

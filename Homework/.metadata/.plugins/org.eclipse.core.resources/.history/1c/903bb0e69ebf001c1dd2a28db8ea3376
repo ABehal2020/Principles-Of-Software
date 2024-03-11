@@ -1,0 +1,53 @@
+package hw4;
+
+import java.util.Objects;
+
+public class Edge<NodeL, EdgeW> {
+	private final NodeL source;
+	private final NodeL destination;
+	private final EdgeW label;
+	private final int hashCode;
+	/*
+	 * Abstraction Function
+	 * An edge is represented by the source vertex, the destination vertex, and the label.
+	 * Start, end, and label all must be non-null values.
+	 */
+	public Edge(NodeL sourceIn, NodeL destinationIn, EdgeW labelIn) {
+		this.source = sourceIn;
+		this.destination = destinationIn;
+		this.label = labelIn;
+		this.hashCode = source.hashCode() + destination.hashCode() + label.hashCode();
+		// this.checkRep();
+	}
+	private void checkRep() {
+		if (this.source == null || this.destination == null || this.label == null) {
+			throw new RuntimeException("Failed rep check as one of the fields is null");
+		}
+	}
+	public NodeL getSource() {
+		return this.source;
+	}
+	public NodeL getDestination() {
+		return this.destination;
+	}
+	public EdgeW getLabel() {
+		return this.label;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof Edge<?,?>) {
+			Edge<?, ?> temp = (Edge<?, ?>) obj;
+			return this.source.equals(temp.source) && this.destination.equals(temp.destination) && this.label.equals(temp.label);
+		} else {
+			return false;
+		}
+	}
+	@Override
+	public int hashCode() {
+		return this.hashCode;
+	}
+}

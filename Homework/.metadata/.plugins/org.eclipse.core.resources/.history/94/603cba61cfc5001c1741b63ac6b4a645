@@ -1,0 +1,48 @@
+package hw4;
+import org.junit.BeforeClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import java.util.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.Before;
+import org.junit.Test;
+
+public final class GraphWrapperTest{
+    @Test
+    public void ConstructorTest(){
+        GraphWrapper Example=new GraphWrapper();
+        assertFalse(Example.listNodes().hasNext());
+    }
+    @Test
+    public void addNodeTest(){
+        GraphWrapper Example=new GraphWrapper();
+        Example.addNode("Hi");
+        assertTrue(Example.listNodes().hasNext());
+        assertEquals(Example.listNodes().next(),"Hi");
+    }
+    @Test
+    public void LexographicOrderTest(){
+        GraphWrapper Example=new GraphWrapper();
+        Example.addNode("b");
+        Example.addNode("a");
+        assertTrue(Example.listNodes().hasNext());
+        Iterator<String> y=Example.listNodes();
+        assertEquals(y.next(),"a");
+        assertEquals(y.next(),"b");
+    }
+    @Test
+    public void addChildrenTest(){
+        GraphWrapper Example=new GraphWrapper();
+        Example.addNode("b");
+        Example.addNode("a");
+        Example.addEdge("a","b","7");
+        assertEquals(Example.listChildren("a").next(),"b(7)");
+        Iterator<String> z=Example.listChildren("a");
+        z.next();
+        assertFalse(z.hasNext());
+    }
+
+}

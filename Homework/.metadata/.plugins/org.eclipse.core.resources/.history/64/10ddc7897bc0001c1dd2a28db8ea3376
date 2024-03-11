@@ -1,0 +1,168 @@
+package hw6;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import hw4.Edge;
+import hw4.Graph;
+import hw5.MarvelParser;
+import javafx.util.Pair;
+
+public class MarvelPaths2 {
+	/*
+	 * This represents a weighted graph among Marvel Characters and finds the shortest paths among them.
+	 * Abstraction Function
+	 * The marvel paths 2 graph is represented by the adjacency list, which is a hashmap with the nodes (keys) mapping to the edges (values).
+	 * The edges are contained in a hashset to avoid duplicate edges in the adjacency list. 
+	 * The edges are also associated with weights (multiplicative inverses of the number of edges going from one character to the other).
+	 * The hashmap implementation also does not allow for duplicate nodes.
+	 * No edges or nodes may be null values.
+	 * Rep Invariant
+	 * The graph and characters may not be null.
+	 */
+    private Graph<String,Double> marvelGraph2;
+    Set<String> chars;
+
+    public void checkRep() {
+        if (marvelGraph2 == null || chars == null) {
+        	throw new RuntimeException("Failed rep check as MarvelPaths2 graph is empty.");
+        }
+    }
+
+    /**
+     * @param: filename The path to a "CSV" file that contains the
+     *                  "character","book" pairs
+     * @requires: filename != null
+     * @modifies: h, chars
+     * @effects: Makes a graph wraper out of a csv file.
+     * @returns: None
+     */
+    public void createNewGraph(String filename) {
+    	this.marvelGraph2 = new Graph<String, Double>();
+    	Map<String, Set<String>> charsInBooks = new HashMap<String, Set<String>>();
+    	Map<String, Map<String, Integer>> edgeFrequencies = new HashMap<String, Map<String, Integer>>();
+        chars = new HashSet<String>();
+        
+        try {
+            MarvelParser.readData(filename, charsInBooks, chars);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+		for (String character: chars) {
+			marvelGraph2.addNode(character);
+			edgeFrequencies.put(character, new HashMap<String, Integer>());
+		}
+		
+		for (String book: charsInBooks.keySet()) {
+            Set<String> characters = charsInBooks.get(book);
+            for (String character: characters) {
+            	for (String character2: characters) {
+            		if (!character.equals(character2)) {
+            			Map<String, Integer> retrieval = edgeFrequencies.get(character);
+            			if (retrieval.get(character2) != null) {
+            				retrieval.put(character2, retrieval.get(character2) + 1);
+            			} else {
+            				retrieval.put(character2, 1);
+            			}
+            		}
+            	}
+            }
+		}
+
+		for (String parentNode: edgeFrequencies.keySet()) {
+			Map<String, Integer> childNodes = edgeFrequencies.get(parentNode);
+			for (String childNode: childNodes.keySet()) {
+				double edgeWeight = (double)1/childNodes.get(childNode);
+				Edge<String, Double> label = new Edge<String, Double>(parentNode, childNode, edgeWeight);
+				marvelGraph2.addEdge(label);
+			}
+		}
+		
+        this.checkRep();
+    }
+
+    /**
+     * @param: node1 a string that represent the starting node
+     * @param: node2 a string that represent the ending node
+     * @requires: node1 != null && node2 != null
+     * 
+     * @modifies: none
+     * @effects: returns path from node1 to node2
+     * @returns: A string representing the path
+     */
+    public String findPath(String node1, String node2) {
+    	if (!this.chars.contains(node1) && !this.chars.contains(node2) && node1 != node2) {
+            return String.format("unknown character %s\nunknown character %s\n", node1,node2);
+        } else if (!this.chars.contains(node1)) {
+            return String.format("unknown character %s\n", node1);
+        } else if(!this.chars.contains(node2)) {
+        	return String.format("unknown character %s\n", node2);
+        } else {
+        	Map<String, Double> distances = new HashMap<String, Double>();
+            PriorityQueue<String> active = new PriorityQueue<String>((v1, v2) -> Double.compare(distances.get(v1), distances.get(v2)));
+            HashSet<String> finished = new HashSet<String>();
+            LinkedList<String> nodes = this.marvelGraph2.getNodes();
+            Map<String, String> pathsTracker = new HashMap<String, String>();
+            pathsTracker.put(node1, "path from " + node1 + " to " + node2 + ":\n");
+            
+            for (String node: nodes) {
+                if (node.equals(node1)) {
+                    distances.put(node, 0.0);
+                    active.add(node);
+                } else {
+                    distances.put(node, Double.MAX_VALUE);
+                }
+            }
+            
+            while (!active.isEmpty()) {
+                String currNode = active.remove();
+                if (currNode.equals(node2)) {
+                    return pathsTracker.get(node2) + String.format("total cost: %.3f\n", distances.get(node2));
+                } else {
+                	LinkedList<Edge<String, Double>> edges = this.marvelGraph2.getChildren(currNode);
+                	for (Edge<String, Double> edge: edges) {
+                		if (!finished.contains(edge.getDestination())) {
+	                        if (distances.get(edge.getDestination()) > distances.get(currNode) + edge.getLabel()) {
+	                            distances.put(edge.getDestination(), distances.get(currNode) + edge.getLabel());
+	                            active.add(edge.getDestination());
+	                            pathsTracker.put(edge.getDestination(), pathsTracker.get(currNode) + currNode + " to " + edge.getDestination() + String.format(" with weight %.3f\n", edge.getLabel()));
+	                        }
+                		}
+                    }
+                }
+                finished.add(currNode);
+            }
+        	return String.format("path from " + node1 + " to " + node2 + ":\nno path found\n");
+        }
+    }
+    
+	public static void main(String[] arg) {
+
+		String file = arg[0];
+		
+		try {
+			Map<String, Set<String>> charsInBooks = new HashMap<String, Set<String>>();
+			Set<String> chars = new HashSet<String>();
+			MarvelParser.readData(file, charsInBooks, chars);
+			System.out.println(
+					"Read " + chars.size() + " characters who appear in " + charsInBooks.keySet().size() + " books.");
+			MarvelPaths2 marvelGraph = new MarvelPaths2();
+			marvelGraph.createNewGraph(file);
+			MarvelPaths2 Example=new MarvelPaths2();
+	        Example.createNewGraph(file);
+	        System.out.println(Example.findPath("PETERS, SHANA TOC", "SEERESS"));
+	        System.out.println(Example.findPath("GOOM", "HOFFMAN"));
+	        System.out.println(Example.findPath("BATMAN", "CAPTAIN AMERICA"));
+	        System.out.println(Example.findPath("BATMAN", "GREEN LANTERN"));
+	        System.out.println(Example.findPath("SEERESS", "SEERESS"));
+	        System.out.println(Example.findPath("BATMAN", "BATMAN"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

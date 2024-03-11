@@ -1,0 +1,25 @@
+package hw4;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+public final class NodeTest {
+    @Test
+    public void ConstructorTest() {
+    	Node test1 = new Node("hello");
+    	assertEquals(test1.getName(), "hello");
+    	Node test2 = new Node(test1);
+    	assertEquals(test1.getName(), test2.getName());
+    }
+    @Test
+    public void EqualityTest() {
+    	Node test1 = new Node("goodbye");
+    	Node test2 = new Node("goodbye");
+    	Node test3 = new Node(test1);
+    	assertTrue(test1.equals(test2));
+    	assertTrue(test1.equals(test3));
+    	assertTrue(test2.equals(test3));
+    }
+}

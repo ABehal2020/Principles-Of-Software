@@ -1,0 +1,36 @@
+package hw6;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+
+import org.junit.Test;
+
+public final class MarvelPaths2Test {
+    @Test
+    public void ConstructorTest() throws IOException {
+        MarvelPaths2 Example = new MarvelPaths2();
+        Example.createNewGraph("data/marvel.csv");
+        System.gc();
+    }
+    
+    @Test 
+    public void PathsTest1() throws IOException {
+        String test1 = new String("path from PETERS, SHANA TOC to SEERESS:\n"
+        		+ "PETERS, SHANA TOC to KNIGHT, MISTY with weight 1.000\n"
+        		+ "KNIGHT, MISTY to CAGE, LUKE/CARL LUCA with weight 0.017\n"
+        		+ "CAGE, LUKE/CARL LUCA to HULK/DR. ROBERT BRUC with weight 0.032\n"
+        		+ "HULK/DR. ROBERT BRUC to RAVAGE/PROF. GEOFFRE with weight 0.500\n"
+        		+ "RAVAGE/PROF. GEOFFRE to SEERESS with weight 1.000\n"
+        		+ "total cost: 2.549\n");
+        MarvelPaths2 Example = new MarvelPaths2();
+        Example.createNewGraph("behala/data/marvel.csv");
+        assertEquals(Example.findPath("PETERS, SHANA TOC", "SEERESS"),test1);
+        assertEquals(Example.findPath("GOOM", "HOFFMAN"),"path from GOOM to HOFFMAN:\nno path found\n");
+        assertEquals(Example.findPath("BATMAN", "CAPTAIN AMERICA"),"unknown character BATMAN\n");
+        assertEquals(Example.findPath("BATMAN", "GREEN LANTERN"),"unknown character BATMAN\nunknown character GREEN LANTERN\n");
+        assertEquals(Example.findPath("SEERESS", "SEERESS"),"path from SEERESS to SEERESS:\ntotal cost: 0.000\n");
+        assertEquals(Example.findPath("BATMAN", "BATMAN"),"unknown character BATMAN\n");
+        System.gc();
+    }
+}

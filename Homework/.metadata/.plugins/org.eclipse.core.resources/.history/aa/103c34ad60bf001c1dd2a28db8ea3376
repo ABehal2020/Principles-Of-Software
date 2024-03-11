@@ -1,0 +1,62 @@
+package hw4;
+
+import java.util.Objects;
+
+public class Edge {
+	private final String source;
+	private final String destination;
+	private final String label;
+	private final int hashCode;
+	/*
+	 * Abstraction Function
+	 * An edge is represented by the source vertex, the destination vertex, and the label.
+	 * Start, end, and label all must be non-null values.
+	 */
+	public Edge(String sourceIn, String destinationIn, String labelIn) {
+		this.source = sourceIn;
+		this.destination = destinationIn;
+		this.label = labelIn;
+		// Node sourceNode = new Node(this.source);
+		// Node destinationNode = new Node(this.destination);
+		// This implementation comes from
+	    // http://www.partow.net/programming/hashfunctions/
+		int hash = 1315423911;
+		int hashValue = 0;
+		String combined = sourceIn + destinationIn + labelIn;
+		for (int i = 0; i < combined.length(); i++) {
+			hashValue ^= ((hash << 5) + combined.charAt(i) + (hash >> 2));
+		}
+		this.hashCode = hashValue;
+		// this.checkRep();
+	}
+	private void checkRep() {
+		if (this.source == null || this.destination == null || this.label == null) {
+			throw new RuntimeException("Failed rep check as one of the fields is null");
+		}
+	}
+	public String getSource() {
+		return this.source;
+	}
+	public String getDestination() {
+		return this.destination;
+	}
+	public String getLabel() {
+		return this.label;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Edge other = (Edge) obj;
+		return Objects.equals(destination, other.destination) && Objects.equals(label, other.label)
+				&& Objects.equals(source, other.source);
+	}
+	@Override
+	public int hashCode() {
+		return this.hashCode;
+	}
+}

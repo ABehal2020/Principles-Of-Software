@@ -1,0 +1,6 @@
+package Factories;
+
+public abstract class Company {
+	public abstract Computer createComputer();
+	public abstract HeadPhones createHeadPhones();
+}

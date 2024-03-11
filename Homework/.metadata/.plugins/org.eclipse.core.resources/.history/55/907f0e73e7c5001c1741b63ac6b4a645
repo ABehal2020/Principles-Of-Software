@@ -1,0 +1,57 @@
+package hw7;
+
+public class CampusPaths {
+	public static void main(String[] argv) {
+		String menu = "Menu:\n"
+				+ "b: get a list of all buildings\n"
+				+ "r: given two builds, prints directions for the shortest route between them\n"
+				+ "q: quits the program\n"
+				+ "m: prints a menu of all commands\n";
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String input = "";
+		while(!input.equals("q"))
+		{
+			try
+			{
+				input = reader.readLine();
+			}
+			catch (IOException e)
+			{
+				break;
+			}
+			if(input.equals("b"))
+				listBuilding(rpi);
+			else if(input.equals("r"))
+			{
+				String start;
+				String end;
+				System.out.print("First building id/name, followed by Enter: ");
+				try
+				{
+					start = reader.readLine();
+				}
+				catch (IOException badinput)
+				{
+					break;
+				}
+				System.out.print("Second building id/name, followed by Enter: ");
+				try
+				{
+					end = reader.readLine();
+				}
+				catch (IOException badinput)
+				{
+					break;
+				}
+				System.out.print(rpi.findPath(start, end));
+			}
+			else if(input.equals("q"))
+				break;
+			else if(input.equals("m"))
+				System.out.print(menu);
+			else
+				System.out.print("Unknown option\n");
+		}
+		return;
+	}
+}

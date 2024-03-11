@@ -1,0 +1,61 @@
+package hw7;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+
+import hw6.MarvelPaths2;
+
+public class CampusPaths {
+	public static void main(String[] argv) {
+		CampusGraph rpi = new CampusGraph();
+		try {
+			rpi.createNewGraph("behala/data/RPI_map_data_Nodes.csv", "behala/data/RPI_map_data_Edges.csv");
+		} catch (IOException e) {
+			return;
+		}
+		String menu = "Menu:\n"
+				+ "b: get a list of all buildings\n"
+				+ "r: given two builds, prints directions for the shortest route between them\n"
+				+ "q: quits the program\n"
+				+ "m: prints a menu of all commands\n";
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String input = "";
+		while (!input.equals("q")) {
+			try {
+				input = reader.readLine();
+			} catch (IOException e) {
+				break;
+			}
+			if (input.equals("b")) {
+				System.out.println(rpi.listBuildings());
+			} else if(input.equals("r")) {
+				String source;
+				String destination;
+				System.out.print("Enter first building name or ID. ");
+				try {
+					source = reader.readLine();
+				} catch (IOException e) {
+					break;
+				}
+				System.out.print("Second building name or ID. ");
+				try {
+					destination = reader.readLine();
+				} catch (IOException e) {
+					break;
+				}
+				// System.out.print(rpi.findPath(source, destination));
+				System.out.println("not implemented yet");
+			} else if (input.equals("q")) {
+				break;
+			} else if (input.equals("m")) {
+				System.out.print(menu);
+			} else {
+				System.out.print("Unknown option\n");
+			}
+		}
+		return;
+	}
+}

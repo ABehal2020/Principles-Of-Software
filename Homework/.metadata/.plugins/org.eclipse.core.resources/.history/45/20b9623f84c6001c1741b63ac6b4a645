@@ -1,0 +1,87 @@
+package hw7;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import hw4.Edge;
+import hw4.Graph;
+
+public class CampusGraph {
+	private Graph<Location, Double> graph;
+	private HashMap<String, Integer> nameIdMap;
+	private HashMap<Integer, Location> idLocationMap;
+
+	public void createNewGraph(String filename1, String filename2) throws IOException {
+		HashMap<Integer, Integer> idMap = new HashMap<Integer, Integer>();
+		this.nameIdMap = new HashMap<String, Integer>();
+		this.idLocationMap = new HashMap<Integer, Location>();
+		this.graph = new Graph<Location, Double>();
+		CampusParser.readNodeData(filename1, this.nameIdMap, this.idLocationMap);
+		CampusParser.readEdgeData(filename2, idMap);
+		for (Map.Entry<Integer, Integer> mapentry : idMap.entrySet()) {
+			int id1 = mapentry.getKey();
+			int id2 = mapentry.getValue();
+			Location position1 = idLocationMap.get(id1);
+			Location position2 = idLocationMap.get(id2);
+			double distance = Math.sqrt(Math.pow((position1.getxCoordinate() - position2.getxCoordinate()), 2) +
+					Math.pow((position1.getyCoordinate() - position2.getyCoordinate()), 2));
+			graph.addNode(position1);
+			graph.addNode(position2);
+			Edge<Location, Double> label = new Edge<Location, Double>(position1, position2, distance);
+			graph.addEdge(label);
+			graph.addEdge(label);
+		}
+	}
+	
+	public String listBuildings() {
+		ArrayList<String> buildings = new ArrayList<String>();
+		for (String building: nameIdMap.keySet()) {
+			if (!building.equals("Intersection")) {
+				buildings.add(building + "," + nameIdMap.get(building));
+			}
+		}
+		Collections.sort(buildings);
+		String buildingsArray[] = buildings.toArray(new String[buildings.size()]);
+		String buildingsList = "";
+		for (int i = 0; i < buildingsArray.length; i++) {
+			if (i < buildingsArray.length - 1) {
+				buildingsList += buildingsArray[i] + "\n";
+			} else {
+				buildingsList += buildingsArray[i];
+			}
+		}
+		return buildingsList;
+	}
+	
+	public String findPath(String node1, String node2) {
+		int id1 = -1;
+		int id2 = -1;
+		Location loc1;
+		Location loc2;
+		try {
+		    id1 = Integer.parseInt(node1);
+		    id2 = Integer.parseInt(node2);
+		} catch (NumberFormatException e) {
+		    id2 = id1;
+		}
+		if (id1 == -1) {
+			id1 = nameIdMap.get(node1);
+		} 
+		if (id2 == -1) {
+			id2 = nameIdMap.get(node2);
+		}
+		loc1 = idLocationMap.get(id1);
+		loc2 = idLocationMap.get(id2);
+		return graph.findPath(loc1, loc2);
+	}
+}

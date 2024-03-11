@@ -1,0 +1,30 @@
+package hw4;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+public final class EdgeTest {
+    @Test
+    public void ConstructorTest() {
+        Edge<String, String> edge1 = new Edge<String, String>("A", "B", "2");
+        assertEquals(edge1.getSource(), "A");
+        assertEquals(edge1.getDestination(), "B");
+        assertEquals(edge1.getLabel(), "2");
+    }
+    @Test
+    public void EqualityTest() {
+    	Edge<String, String> edge1 = new Edge<String, String>("A", "B", "1");
+    	Edge<String, String> edge2 = new Edge<String, String>("A", "B", "1");
+    	Edge<String, String> edge3 = edge1;
+    	Edge<String, String> edge4 = new Edge<String, String>("A", "B", "3");
+    	assertTrue(edge1.equals(edge2));
+    	assertTrue(edge2.equals(edge3));
+    	assertTrue(edge1.equals(edge3));
+    	assertFalse(edge1.equals(edge4));
+    	assertFalse(edge4.equals(edge1));
+    	assertFalse(edge2.equals(edge4));
+    }
+}

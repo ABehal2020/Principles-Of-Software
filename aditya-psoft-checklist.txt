@@ -1,0 +1,44 @@
+# General Eclipse Project Setup Instructions
+1. Change to Java 8.
+2. Change compiler compliance settings to 1.8.
+3. Add JUnit 4 as a library to run tests.
+
+# HW 0
+GitHub Repository URI: https://submitty.cs.rpi.edu/git/s22/csci2600/hw00/behala
+Local Repository Directory: /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw/git/behala
+
+git add .
+git commit -a -m"commit message"
+git push -u origin main
+
+# HW 1
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw01/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw1/behala
+git add .
+git commit -a -m"commit message"
+git push -u origin main
+
+# HW 2
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw02/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw2/behala
+
+# HW 3
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw03/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw3/behala
+
+# HW 4
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw04/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw4/behala
+
+# HW 5
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw04/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw5/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw5/behala/data
+
+# HW 6
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw04/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw6/behala
+
+# HW 7
+git clone https://submitty.cs.rpi.edu/git/s22/csci2600/hw04/behala
+cd /Users/adityabehal/Documents/RPI/Sophomore/Spring/Principles\ of\ Software/Homework/hw7/behala

@@ -1,0 +1,44 @@
+package hw4;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+public final class EdgeTest {
+    @Test
+    public void ConstructorTest() {
+        Edge<String, String> edge1 = new Edge<String, String>("A", "B", "2");
+        assertEquals(edge1.getSource(), "A");
+        assertEquals(edge1.getDestination(), "B");
+        assertEquals(edge1.getLabel(), "2");
+        Edge<String, Integer> edge2 = new Edge<String, Integer>("A", "B", 2);
+        assertEquals(edge2.getSource(), "A");
+        assertEquals(edge2.getDestination(), "B");
+        assertEquals(edge2.getLabel(), new Integer(2));
+    }
+    @Test
+    public void EqualityTest() {
+    	Edge<String, String> edge1 = new Edge<String, String>("A", "B", "1");
+    	Edge<String, String> edge2 = new Edge<String, String>("A", "B", "1");
+    	Edge<String, String> edge3 = edge1;
+    	Edge<String, String> edge4 = new Edge<String, String>("A", "B", "3");
+    	assertTrue(edge1.equals(edge2));
+    	assertTrue(edge2.equals(edge3));
+    	assertTrue(edge1.equals(edge3));
+    	assertFalse(edge1.equals(edge4));
+    	assertFalse(edge4.equals(edge1));
+    	assertFalse(edge2.equals(edge4));
+    	Edge<String, Double> edge5 = new Edge<String, Double>("A", "B", 1.0);
+    	Edge<String, Double> edge6 = new Edge<String, Double>("A", "B", 1.0);
+    	Edge<String, Double> edge7 = edge5;
+    	Edge<String, Double> edge8 = new Edge<String, Double>("A", "B", 3.0);
+    	assertTrue(edge5.equals(edge6));
+    	assertTrue(edge6.equals(edge7));
+    	assertTrue(edge5.equals(edge7));
+    	assertFalse(edge5.equals(edge8));
+    	assertFalse(edge8.equals(edge5));
+    	assertFalse(edge6.equals(edge8));
+    }
+}

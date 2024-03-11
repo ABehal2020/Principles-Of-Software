@@ -1,0 +1,46 @@
+package hw4;
+
+import java.util.Iterator;
+
+public class GraphWrapper {
+	Graph<String, String> graph;
+	public GraphWrapper() {
+		this.graph = new Graph<String, String>();
+	}
+	public void addNode(String nodeInfo) {
+		this.graph.addNode(nodeInfo);
+	}
+	public void addEdge(String sourceInfo, String destinationInfo, String labelInfo) {
+		Edge<String, String> label = new Edge<String, String>(sourceInfo, destinationInfo, labelInfo);
+		this.graph.addEdge(label);
+	}
+	public Iterator<String> listNodes() {
+		return this.graph.getNodes();
+	}
+	public Iterator<String> listChildren(String nodeInfo) {
+		Node vertex = new Node(nodeInfo);
+		return this.graph.getChildren(vertex);
+	}
+	
+	/*
+	public Iterator<String> listNodes(){
+        LinkedList<String> data=this.g.getNodes();
+        Collections.sort(data);
+        return data.iterator();
+    }
+    public Iterator<String> listChildren(String parentNode){
+        LinkedList<Edge<String,String>> data1=this.g.getChildren(parentNode);
+        LinkedList<String> data2=new LinkedList<String>();
+        for(Edge<String,String> i : data1){
+            data2.add(i.getEnd()+"("+i.getLabel()+")");
+        }
+        Collections.sort(data2);
+        return data2.iterator();
+    }
+   }
+   */
+}
+
+
+
+

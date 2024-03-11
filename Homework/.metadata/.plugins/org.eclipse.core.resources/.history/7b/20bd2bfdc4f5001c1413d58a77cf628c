@@ -1,0 +1,33 @@
+enum Manufacturer {
+	MICROSOFT, APPLE
+}
+
+// have microsoft and apple be concrete factories implementing abstract factory interface
+// product object can be computers and headphones
+
+class ComputerFactory {
+	private ComputerFactory() {
+		
+	}
+	
+	public static Computer buildComputer(ComputerType type) {
+		Computer computer = null;
+		switch(type) {
+			case WINDOWS:
+				computer = WindowsComputerFactory.buildComputer(type);
+			case MAC:
+				computer = MacComputerFactory.buildComputer(type);
+			case LINUX:
+				computer = LinuxComputerFactory.buildComputer(type);
+		}
+		return computer;
+	}
+}
+
+public class AbstractDesign {
+	public static void main(String[] args) {
+		System.out.println(ComputerFactory.buildComputer(ComputerType.Windows));
+		System.out.println(ComputerFactory.buildComputer(ComputerType.Mac));
+		System.out.println(ComputerFactory.buildComputer(ComputerType.Linux));
+	}
+}

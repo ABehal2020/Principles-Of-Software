@@ -1,0 +1,241 @@
+package hw6;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import hw4.Edge;
+import hw4.Graph;
+import hw5.MarvelParser;
+import javafx.util.Pair;
+
+public class MarvelPaths2 {
+     /**
+     * This represents a graph of marvel charachtesrs that supports finiding the
+     * shortest path from charachter to characer
+     * Abstraction function
+     * It is a graph with charachters as nodes and edges that consist of the book as
+     * the label
+     * Rep Invariant
+     * h!=null && chars!=null
+     */
+    private Graph<String,Double> marvelGraph2;
+    Set<String> chars;
+
+    public void checkrep() {
+        if (marvelGraph2 == null || chars == null) {
+        	throw new RuntimeException("Failed rep check as MarvelPaths2 graph is empty.");
+        }
+    }
+
+    /**
+     * @param: filename The path to a "CSV" file that contains the
+     *                  "character","book" pairs
+     * @requires: filename != null
+     * @modifies: h, chars
+     * @effects: Makes a graph wraper out of a csv file.
+     * @returns: None
+     */
+    public void createNewGraph(String filename) {
+    	this.marvelGraph2 = new Graph<String, Double>();
+    	Map<String, Set<String>> charsInBooks = new HashMap<String, Set<String>>();
+    	Map<String, Map<String, Integer>> edgeFrequencies = new HashMap<String, Map<String, Integer>>();
+        chars = new HashSet<String>();
+        
+        try {
+            MarvelParser.readData(filename, charsInBooks, chars);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+		for (String character: chars) {
+			marvelGraph2.addNode(character);
+			edgeFrequencies.put(character, new HashMap<String, Integer>());
+		}
+		
+		for (String book: charsInBooks.keySet()) {
+            Set<String> characters = charsInBooks.get(book);
+            for (String character: characters) {
+            	for (String character2: characters) {
+            		if (!character.equals(character2)) {
+            			Map<String, Integer> retrieval = edgeFrequencies.get(character);
+            			if (retrieval.get(character2) != null) {
+            				retrieval.put(character2, retrieval.get(character2) + 1);
+            			} else {
+            				retrieval.put(character2, 1);
+            			}
+            		}
+            	}
+            }
+		}
+
+		for (String parentNode: edgeFrequencies.keySet()) {
+			Map<String, Integer> childNodes = edgeFrequencies.get(parentNode);
+			for (String childNode: childNodes.keySet()) {
+				double edgeWeight = (double)1/childNodes.get(childNode);
+				Edge<String, Double> label = new Edge<String, Double>(parentNode, childNode, edgeWeight);
+				marvelGraph2.addEdge(label);
+			}
+		}
+		
+        this.checkrep();
+    }
+
+    /**
+     * @param: node1 a string that represent the starting node
+     * @param: node2 a string that represent the ending node
+     * @requires: node1 != null && node2 != null
+     * 
+     * @modifies: none
+     * @effects: returns path from node1 to node2
+     * @returns: A string representing the path
+     */
+    /*
+    public String findPath(String node1, String node2) {
+        if (!this.chars.contains(node1) && !this.chars.contains(node2) && node1 != node2) {
+            return String.format("unknown character %s\nunknown character %s\n", node1.trim(), node2.trim());
+        }
+        if (!this.chars.contains(node1)) {
+            return "unknown character " + node1 + "\n";
+        }
+        if (!this.chars.contains(node2)) {
+            return "unknown character " + node2 + "\n";
+        }
+        Map<String,Double> dist=new HashMap<String,Double>();
+        PriorityQueue<String> pq = new PriorityQueue<String>((v1, v2) -> Double.compare(dist.get(v1), dist.get(v2)));
+        LinkedList<String> tmp=this.marvelGraph2.getNodes();
+        Map<String,String> path=new HashMap<String,String>();
+        path.put(node1, "path from " + node1 + " to " + node2 + ":\n");
+        for(String name: tmp){
+            if(name.equals(node1)){
+                dist.put(name, 0.0);
+                pq.add(name);
+            }
+            else{
+                dist.put(name, Double.MAX_VALUE);
+            }
+        }
+        while(!pq.isEmpty()){
+            String current_node=pq.poll();
+            LinkedList<Edge<String,Double>> children= this.marvelGraph2.getChildren(current_node);
+            if(current_node.equals(node2)){
+                return path.get(node2) + String.format("total cost: %.3f\n", dist.get(node2));
+            }
+            for(Edge<String,Double> i: children){
+                if(dist.get(i.getDestination())!=null && dist.get(i.getDestination())>dist.get(current_node)+i.getLabel()){
+                    dist.put(i.getDestination(), dist.get(current_node)+i.getLabel());
+                    pq.add(i.getDestination());
+                    path.put(i.getDestination(), path.get(current_node)+String.format("%s to %s with weight %.3f\n", current_node,i.getDestination(),i.getLabel()));
+                }
+            }
+        }
+        return "path from " + node1 + " to " + node2 + ":\n" + "no path found\n";
+    }
+    */
+    
+    public String findPath(String node1, String node2) {
+    	/*
+    	 * Dijkstra's algorithm assumes a graph with all nonnegative edge weights.
+ 
+    start = starting node
+    dest = destination node
+    active = priority queue.  Each element is a path from start to a given node.
+             A path's "priority" in the queue is the total cost of that path.
+             Nodes for which no path is known yet are not in the queue.
+    finished = set of nodes for which we know the minimum-cost path from start.
+ 
+    // Initially we only know of the path from start to itself, which has a cost
+    // of zero because it contains no edges.
+    Add a path from start to itself to active
+ 
+    while active is non-empty:
+        // minPath is the lowest-cost path in active and is the minimum-cost
+        // path for some node
+        minPath = active.removeMin()
+        minDest = destination node in minPath
+        
+        if minDest is dest:
+            return minPath
+ 
+        if minDest is in finished:
+            continue
+ 
+        for each edge e = ⟨minDest, child⟩:
+            // If we don't know the minimum-cost path from start to child,
+            // examine the path we've just found
+            if child is not in finished:
+                newPath = minPath + e
+                add newPath to active
+ 
+        add minDest to finished
+ 
+    If the loop terminates, then no path exists from start to dest.
+    The implementation should indicate this to the client.
+    	 */
+    	if (!this.chars.contains(node1) && !this.chars.contains(node2) && node1 != node2) {
+            return String.format("unknown character %s\nunknown character %s\n", node1,node2);
+        } else if (!this.chars.contains(node1)) {
+            return String.format("unknown character %s\n", node1);
+        } else if(!this.chars.contains(node2)) {
+        	return String.format("unknown character %s\n", node2);
+        } else {
+        	Map<String, Double> distances = new HashMap<String, Double>();
+            PriorityQueue<String> active = new PriorityQueue<String>((v1, v2) -> Double.compare(distances.get(v1), distances.get(v2)));
+            LinkedList<String> nodes = this.marvelGraph2.getNodes();
+            Map<String, String> path = new HashMap<String, String>();
+            path.put(node1, "path from " + node1 + " to " + node2 + ":\n");
+            for(String name: nodes){
+                if(name.equals(node1)){
+                    distances.put(name, 0.0);
+                    active.add(name);
+                }
+                else{
+                    distances.put(name, Double.MAX_VALUE);
+                }
+            }
+            while(!active.isEmpty()){
+                String current_node=active.poll();
+                LinkedList<Edge<String,Double>> children= this.marvelGraph2.getChildren(current_node);
+                if(current_node.equals(node2)){
+                    return path.get(node2) + String.format("total cost: %.3f\n", distances.get(node2));
+                }
+                for(Edge<String,Double> i: children){
+                    if(distances.get(i.getDestination())!=null && distances.get(i.getDestination())>distances.get(current_node)+i.getLabel()){
+                        distances.put(i.getDestination(), distances.get(current_node)+i.getLabel());
+                        active.add(i.getDestination());
+                        path.put(i.getDestination(), path.get(current_node)+String.format("%s to %s with weight %.3f\n", current_node,i.getDestination(),i.getLabel()));
+                    }
+                }
+            }
+        	return String.format("path from %s to %s:\nno path found\n", node1, node2);
+        }
+    }
+    
+	public static void main(String[] arg) {
+
+		String file = arg[0];
+		
+		try {
+			Map<String, Set<String>> charsInBooks = new HashMap<String, Set<String>>();
+			Set<String> chars = new HashSet<String>();
+			MarvelParser.readData(file, charsInBooks, chars);
+			System.out.println(
+					"Read " + chars.size() + " characters who appear in " + charsInBooks.keySet().size() + " books.");
+			MarvelPaths2 marvelGraph = new MarvelPaths2();
+			marvelGraph.createNewGraph(file);
+			MarvelPaths2 Example=new MarvelPaths2();
+	        Example.createNewGraph(file);
+	        System.out.println(Example.findPath("PETERS, SHANA TOC", "SEERESS"));
+	        System.out.println(Example.findPath("GOOM", "HOFFMAN"));
+	        System.out.println(Example.findPath("BATMAN", "CAPTAIN AMERICA"));
+	        System.out.println(Example.findPath("BATMAN", "GREEN LANTERN"));
+	        System.out.println(Example.findPath("SEERESS", "SEERESS"));
+	        System.out.println(Example.findPath("BATMAN", "BATMAN"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

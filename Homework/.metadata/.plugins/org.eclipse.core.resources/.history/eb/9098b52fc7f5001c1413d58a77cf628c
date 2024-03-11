@@ -1,0 +1,27 @@
+package Factories;
+
+public class Microsoft {
+	@Override
+	public Headphones createHeadphones() {
+		return new SurfaceHeadphones();
+	}
+	
+	@Override 
+	public Computer createComputer() {
+		return new SurfacePro();
+	}
+}
+
+public class AsusManufacturer extends Company {
+
+    @Override
+    public Gpu createGpu() {
+        return new AsusGpu();
+    }
+
+    @Override
+    public Monitor createMonitor() {
+        return new AsusMonitor();
+    }
+
+}

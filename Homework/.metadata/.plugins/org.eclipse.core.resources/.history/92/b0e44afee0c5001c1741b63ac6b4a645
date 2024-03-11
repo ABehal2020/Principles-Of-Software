@@ -1,0 +1,10 @@
+package hw7;
+
+public class Location {
+	private String name;
+	private String id;
+	private double xCoordinate;
+	private double yCoordinate;
+	
+	
+}

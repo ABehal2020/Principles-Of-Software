@@ -1,0 +1,15 @@
+package hw7;
+
+public class Location {
+	private String name;
+	private int id;
+	private double xCoordinate;
+	private double yCoordinate;
+	
+	public Location(String nameIn, int idIn, double xCoordinateIn, double yCoordinateIn) {
+		this.name = nameIn;
+		this.id = idIn;
+		this.xCoordinate = xCoordinateIn;
+		this.yCoordinate = yCoordinateIn;
+	}
+}

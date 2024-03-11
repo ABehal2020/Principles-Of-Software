@@ -1,0 +1,17 @@
+import Factories.Apple;
+import Factories.Company;
+import Factories.Microsoft;
+import Products.Computer;
+import Products.Headphones;
+
+public class MainApplication {
+	public static void main(String[] args) {
+		Company microsoft = new Microsoft();
+		Computer surfacePro = microsoft.createComputer();
+		Headphones surfaceHeadphones = microsoft.createHeadphones();
+		
+		Company apple = new Apple();
+		Computer macBookPro = apple.createComputer();
+		Headphones airPodsMax = apple.createHeadphones();
+	}
+}

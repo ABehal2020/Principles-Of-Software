@@ -1,0 +1,18 @@
+package Products;
+public interface Computer {
+	void build();
+}
+
+public class SurfacePro impelements Computer {
+	@Override
+	void build() {
+		System.out.println("Building Surface Pro...")
+	}
+}
+
+public class MacBookPro implements Computer {
+	@Override
+	void build() {
+		System.out.println("Building Mac Book Pro...");
+	}
+}

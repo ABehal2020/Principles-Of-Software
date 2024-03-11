@@ -1,0 +1,47 @@
+package hw7;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+
+public class CampusParser {
+	@SuppressWarnings("resource")
+	public static void readNodeData(String filename, HashMap<String, Integer> nameIdMap, HashMap<Integer, Location> idLocationMap) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String line = null;
+	    while ((line = reader.readLine()) != null) {
+	         String[] sample = line.split(",");
+	         if (sample.length != 4) {
+	        	 throw new IOException("Invalid file.");
+	         }
+	         String name = (String)sample[0];
+	         if (name.equals("")) {
+	        	 name = "Intersection";
+	         }
+	         int id = Integer.parseInt(sample[1]);
+	         double x = Double.parseDouble(sample[2]);
+	         double y = Double.parseDouble(sample[3]);
+	         nameIdMap.put(name, id);
+	         idLocationMap.put(id, new Location(name, id, x, y));
+	    }
+	    reader.close();
+	}
+
+	@SuppressWarnings("resource")
+	public static void readEdgeData(String filename, HashMap<Integer, Integer> idMap) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+	    String line = null;
+	    while ((line = reader.readLine()) != null)
+	    {
+	         Object[] sample = line.split(",");
+	         if (sample.length != 2) {
+	        	 throw new IOException("Invalid file.");
+	         }
+	         int id1 = (int)sample[0];
+	         int id2 = (int)sample[1];
+	         idMap.put(id1, id2);
+	    }
+	    reader.close();
+	}
+}

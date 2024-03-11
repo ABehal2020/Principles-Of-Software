@@ -1,0 +1,29 @@
+package hw4;
+
+import java.util.Iterator;
+
+public class GraphWrapper {
+	Graph<String, String> graph;
+	public GraphWrapper() {
+		this.graph = new Graph<String, String>();
+	}
+	public void addNode(String nodeInfo) {
+		Node vertex = new Node(nodeInfo);
+		this.graph.addNode(vertex);
+	}
+	public void addEdge(String sourceInfo, String destinationInfo, String labelInfo) {
+		Edge label = new Edge(sourceInfo, destinationInfo, labelInfo);
+		this.graph.addEdge(label);
+	}
+	public Iterator<String> listNodes() {
+		return this.graph.getNodes();
+	}
+	public Iterator<String> listChildren(String nodeInfo) {
+		Node vertex = new Node(nodeInfo);
+		return this.graph.getChildren(vertex);
+	}
+}
+
+
+
+

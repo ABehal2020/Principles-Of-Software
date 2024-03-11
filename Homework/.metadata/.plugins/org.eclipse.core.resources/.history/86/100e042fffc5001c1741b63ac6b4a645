@@ -1,0 +1,122 @@
+package hw7;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import hw4.Edge;
+import hw4.Graph;
+
+public class CampusGraph {
+	private Graph<Location, Double> graph;
+	private HashMap<String, Integer> nameIdMap;
+	private HashMap<Integer, Location> idLocationMap;
+
+	public void createNewGraph(String filename1, String filename2) throws IOException {
+		HashMap<Integer, Integer> idMap = new HashMap<Integer, Integer>();
+		this.nameIdMap = new HashMap<String, Integer>();
+		this.idLocationMap = new HashMap<Integer, Location>();
+		this.graph = new Graph<Location, Double>();
+		CampusParser.readNodeData(filename1, this.nameIdMap, this.idLocationMap);
+		CampusParser.readEdgeData(filename2, idMap);
+		for (Map.Entry<Integer, Integer> mapentry : idMap.entrySet()) {
+			int id1 = mapentry.getKey();
+			int id2 = mapentry.getValue();
+			Location position1 = idLocationMap.get(id1);
+			Location position2 = idLocationMap.get(id2);
+			double distance = Math.sqrt(Math.pow((position1.getxCoordinate() - position2.getxCoordinate()), 2) +
+					Math.pow((position1.getyCoordinate() - position2.getyCoordinate()), 2));
+			graph.addNode(position1);
+			graph.addNode(position2);
+			Edge<Location, Double> label = new Edge<Location, Double>(position1, position2, distance);
+			graph.addEdge(label);
+			graph.addEdge(label);
+		}
+	}
+
+	public String listAllBuildings() {
+		ArrayList<String> unsortedall = new ArrayList<String>();
+		String list = "";
+		for(Entry<Integer, Location> mapentry : idLocationMap.entrySet()) {
+			String name = mapentry.getValue().getName();
+			if (!name.contains("Intersection"))
+				unsortedall.add(name + "," + mapentry.getKey() + "\n");
+		}
+		Collections.sort(unsortedall);
+		for(String building : unsortedall)
+			list += building;
+		return list;
+	}
+	
+	public String[] getBuildings() {
+		ArrayList<String> unsortedall = new ArrayList<String>();
+		String list = "";
+		for(Entry<Integer, Location> mapentry : idLocationMap.entrySet()) {
+			String name = mapentry.getValue().getName();
+			if (!name.contains("Intersection"))
+				unsortedall.add(name + ",");
+		}
+		Collections.sort(unsortedall);
+		for(String building : unsortedall)
+			list += building;
+		String[] array = list.split(",");
+		return array;
+	}
+	
+	public double getX(String name) {
+		Integer temp_id = nameIdMap.get(name);
+		Location temp_coordinate = idLocationMap.get(temp_id);
+		return temp_coordinate.getxCoordinate();
+	}
+	
+	public double getY(String name) {
+		Integer temp_id = nameIdMap.get(name);
+		Location temp_coordinate = idLocationMap.get(temp_id);
+		return temp_coordinate.getyCoordinate();
+	}
+
+	public String getDirection(Location end, Location start) {
+		double angle;
+		if (end.getxCoordinate() < start.getxCoordinate())
+		{
+			angle = Math.toDegrees(Math.acos((end.getyCoordinate() - start.getyCoordinate()) /
+					(Math.sqrt((end.getxCoordinate() - start.getxCoordinate()) * (end.getxCoordinate() - start.getxCoordinate()) +
+							(end.getyCoordinate() - start.getyCoordinate()) * (end.getyCoordinate() - start.getyCoordinate())))));
+			if (0 <= angle && angle < 22.5) 
+                return "North";
+            else if (22.5 <= angle && angle < 67.5)
+                return "NorthEast";
+            else if (67.5 <= angle && angle < 112.5)
+                return "East";
+            else if (112.5 <= angle && angle < 157.5)
+                return "SouthEast";
+            else 
+                return "South";
+		}
+		else
+		{
+			angle = Math.toDegrees(Math.acos( -(end.getyCoordinate()-start.getyCoordinate()) /
+					(Math.sqrt((end.getxCoordinate() - start.getxCoordinate()) * (end.getxCoordinate() - start.getxCoordinate()) +
+					(end.getyCoordinate() - start.getyCoordinate()) * (end.getyCoordinate() - start.getyCoordinate())))));
+			if (0 <= angle && angle < 22.5) 
+                return "South";
+            else if (22.5 <= angle && angle < 67.5)
+                return "SouthWest";
+            else if (67.5 <= angle && angle < 112.5)
+                return "West";
+            else if (112.5 <= angle && angle < 157.5)
+                return "NorthWest";
+            else 
+                return "North";
+		}
+	}
+}

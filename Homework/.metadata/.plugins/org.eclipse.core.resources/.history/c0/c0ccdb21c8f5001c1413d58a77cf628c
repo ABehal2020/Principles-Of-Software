@@ -1,0 +1,11 @@
+import Factories.Company;
+
+public class MainApplication {
+	public static void main(String[] args) {
+		Company microsoft = new Microsoft();
+		Company apple = new Apple();
+		
+		List.of(microsoft.createComputer(), microsoft.createHeadphones(), 
+				apple.createComputer(), apple.createHeadphones()).forEach(Product::build);
+	}
+}

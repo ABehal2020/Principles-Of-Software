@@ -1,0 +1,49 @@
+package hw4;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Iterator;
+
+import org.junit.Test;
+
+public final class GraphTest {
+    @Test
+    public void ConstructorTest() {
+        Graph<String, String> graph1 = new Graph<String, String>();
+        assertEquals(graph1.getNumOfNodes(), 0);
+    }
+    @Test
+    public void addNodeTest() {
+        Graph<String, String> graph1 = new Graph<String, String>();
+        graph1.addNode("hello");
+        assertEquals(graph1.getNumOfNodes(), 1);
+        assertFalse(graph1.addNode("hello"));
+    }
+    @Test
+    public void LexographicOrderTest() {
+        Graph<String, String> graph1 = new Graph<String, String>();
+        graph1.addNode("b");
+        graph1.addNode("c");
+        graph1.addNode("a");
+        assertEquals(graph1.getNumOfNodes(), 3);
+    }
+    @Test
+    public void addChildrenTest() {
+        Graph<String, String> graph1 = new Graph<String, String>();
+        graph1.addNode("b");
+        graph1.addNode("c");
+        graph1.addNode("a");
+        Edge<String, String> edge1 = new Edge<String, String>("a", "b", "7");
+        Edge<String, String> edge2 = new Edge<String, String>("a", "c", "9");
+        Edge<String, String> edge3 = new Edge<String, String>("a", "b", "4");
+        Edge<String, String> edge4 = new Edge<String, String>("a", "b", "7");
+        assertTrue(graph1.addEdge(edge1));
+        assertTrue(graph1.addEdge(edge2));
+        assertTrue(graph1.addEdge(edge3));
+        assertTrue(edge1.equals(edge4));
+        assertFalse(graph1.addEdge(edge4));
+    }
+
+}

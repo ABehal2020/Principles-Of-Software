@@ -1,0 +1,108 @@
+package hw5;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeSet;
+
+import hw4.GraphWrapper;
+
+public class MarvelPaths {
+	/*
+	 * Abstraction Function
+	 * A MarvelGraph is represented by the GraphWrapper, which is a hashmap with the nodes (keys) mapping to the edges (values).
+	 * The nodes are also contained in a set to allow for quick and easy access.
+	 */
+	private GraphWrapper marvelGraph;
+	private Set<String> chars;
+	
+	/**
+	 * @param: None
+	 * @requires: None
+	 * @modifies: None
+	 * @effects: None
+	 * @throws: RuntimeException if one of the fields in MarvelPaths is not initialized
+	 * @returns: None
+	 */
+	// Representation invariant is that characters and marvelGraph cannot be null
+	public void checkRep() {
+		if (marvelGraph == null || chars == null) {
+			throw new RuntimeException("Failed rep check as MarvelPaths graph is empty.");
+		}
+	}
+	
+	/**
+	 * @param: filename name and relative path to csv data file   
+	 * @requires: None
+	 * @modifies: None
+	 * @effects: None
+	 * @throws: None
+	 * @returns: None
+	 */
+	public void createNewGraph(String filename) {
+		// reading data from csv file and constructing marvelGraph object
+		Map<String, Set<String>> charsInBooks = new HashMap<String, Set<String>>();
+		chars = new HashSet<String>();
+		try {
+			MarvelParser.readData(filename, charsInBooks, chars);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+            e.printStackTrace();
+		}
+		
+		marvelGraph = MarvelParser.constructGraph(charsInBooks, chars);
+		
+		checkRep();
+	}
+	
+	/**
+	 * @param: node1 source node
+	 * @param: node2 destination node
+	 * @requires: None
+	 * @modifies: None
+	 * @effects: None
+	 * @throws: None
+	 * @returns: path from node1 to node2 if it exists or appropriate message if path or nodes don't exist
+	 */
+	public String findPath(String node1, String node2) {
+        if (!this.chars.contains(node1) && !this.chars.contains(node2) && node1 != node2) {
+            return String.format("unknown character %s\nunknown character %s\n", node1,node2);
+        } else if (!this.chars.contains(node1)) {
+            return String.format("unknown character %s\n", node1);
+        } else if(!this.chars.contains(node2)) {
+        	return String.format("unknown character %s\n", node2);
+        } else {
+        	Queue<String> queue = new LinkedList<String>();
+            Set<String> visitedNodes = new HashSet<String>();
+            Map<String, String> pathsTracker = new HashMap<String, String>();
+	        queue.add(node1);
+	        pathsTracker.put(node1, String.format("path from %s to %s:\n", node1, node2));
+	        visitedNodes.add(node1);
+	        while (!queue.isEmpty()) {
+	            String removedNode = queue.remove();
+	            if(removedNode.equals(node2)){
+	                return pathsTracker.get(removedNode);
+	            }
+	            Iterator<String> it = marvelGraph.listChildren(removedNode);
+	            while(it.hasNext()) {
+	            	String next = it.next();
+	            	int index1 = next.indexOf("(");
+	                int index2 = next.indexOf(")");
+	                String childNode = next.substring(0, index1);
+	                String label = next.substring(++index1, index2);
+	                if (!visitedNodes.contains(childNode)) {
+	                    pathsTracker.put(childNode,pathsTracker.get(removedNode) + removedNode + " to " + childNode + " via " + label + "\n");
+	                    queue.add(childNode);
+	                    visitedNodes.add(childNode);
+	                }
+	            }
+	        }
+	        return String.format("path from %s to %s:\nno path found\n", node1, node2);
+        }
+    }
+}

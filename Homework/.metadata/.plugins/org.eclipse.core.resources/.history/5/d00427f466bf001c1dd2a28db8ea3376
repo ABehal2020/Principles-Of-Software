@@ -1,0 +1,98 @@
+package hw4;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class Graph<NodeL, EdgeW> {
+	private HashMap<NodeL, HashSet<Edge<NodeL, EdgeW>>> adjacencyList;
+	private int numOfNodes;
+	/*
+	 * Abstraction Function
+	 * A graph is represented by the adjacency list, which is a hashmap with the nodes (keys) mapping to the edges (values).
+	 * The edges are contained in a hashset to avoid duplicate edges in the adjacency list. 
+	 * The hashmap implementation also does not allow for duplicate nodes.
+	 * No edges or nodes may be null values.
+	 */
+	public Graph() {
+		this.numOfNodes = 0;
+		this.adjacencyList = new HashMap<Node, HashSet<Edge>>();
+		// this.checkRep();
+	}
+	private void checkRep(){
+        HashSet<NodeL> nodes = new HashSet<NodeL>();
+        HashSet<Edge> edges = new HashSet<Edge>();
+
+        for (Node vertex: this.adjacencyList.keySet()) {
+        	if (!nodes.add(vertex)) {
+        		throw new RuntimeException("Failed rep check as there is a duplicate node");
+        	}
+        }
+        
+        for (Node vertex: this.adjacencyList.keySet()) {
+        	for (Edge link: this.adjacencyList.get(vertex)) {
+        		if (!edges.add(link)) {
+        			throw new RuntimeException("Failed rep check as there is a duplicate edge");
+        		}
+        	}
+        }
+    }
+	
+	public int getNumOfNodes() {
+		return this.numOfNodes;
+	}
+	// requires vertex is not null
+	public boolean addNode(Node vertex) {
+		if (this.adjacencyList.put(vertex, new HashSet<Edge>()) == null) {
+			this.numOfNodes++;
+			// this.checkRep();
+			return true;
+		} else {
+			// this.checkRep();
+			return false;
+		}
+	}
+	// requires link is not null
+	public boolean addEdge(Edge link) {
+		Node source = new Node(link.getSource());
+		Node destination = new Node(link.getDestination());
+		if (this.adjacencyList.get(source) == null || this.adjacencyList.get(destination) == null) {
+			// this.checkRep();
+			return false;
+		} 
+		if (this.adjacencyList.get(source).add(link)) {
+			// this.checkRep();
+			return true;
+		} else {
+			// this.checkRep();
+			return false;
+		}
+	}
+	
+	public Iterator<String> getChildren(Node vertex) {
+		LinkedList<String> children = new LinkedList<String>();
+		if (this.adjacencyList.get(vertex) == null) {
+			return children.iterator();
+		}
+		for (Edge link: this.adjacencyList.get(vertex)) {
+			children.add(link.getDestination() + "(" + link.getLabel() + ")");
+		}
+		Collections.sort(children);
+		return children.iterator();
+	}
+	
+	public Iterator<String> getNodes() {
+		LinkedList<String> vertices = new LinkedList<String>();
+		for (Node vertex: this.adjacencyList.keySet()) {
+			vertices.add(vertex.getName());
+		}
+		Collections.sort(vertices);
+		return vertices.iterator();
+	}
+}
+
+
+

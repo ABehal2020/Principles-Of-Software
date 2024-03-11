@@ -1,0 +1,16 @@
+package Products;
+
+public class SurfaceHeadphones {
+	@Override
+	public void build() {
+		System.out.println("Building Surface Headphones...");
+	}
+}
+
+
+public class AirPodsMax implements Headphones {
+	@Override
+	public void build() {
+		System.out.println("Building Air Pods Max...");
+	}
+}

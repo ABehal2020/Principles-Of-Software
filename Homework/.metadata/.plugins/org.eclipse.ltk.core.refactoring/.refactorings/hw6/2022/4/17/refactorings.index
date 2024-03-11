@@ -1,0 +1,18 @@
+1650320879711	Delete element
+1650333319232	Delete element
+1650420111132	Rename field 'chars'
+1650420136053	Rename local variable 'charsInBooks'
+1650421317706	Rename local variable 'g'
+1650421343384	Rename local variable 'name'
+1650421628970	Rename local variable 'charactersInBooks'
+1650421643430	Rename field 'characters'
+1650431041525	Rename local variable 'name'
+1650431299382	Rename local variable 'character'
+1650436743072	Rename local variable 'dist'
+1650436763593	Rename local variable 'pq'
+1650436805404	Rename local variable 'tmp'
+1650436891465	Rename local variable 'path'
+1650436914621	Rename local variable 'name'
+1650437366808	Rename local variable 'current_node'
+1650437385908	Rename local variable 'children'
+1650439576082	Rename method 'checkrep'

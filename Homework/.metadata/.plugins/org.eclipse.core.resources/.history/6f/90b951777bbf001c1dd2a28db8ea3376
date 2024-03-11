@@ -1,0 +1,63 @@
+package hw4;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class GraphWrapper {
+	Graph<String, String> graph;
+	public GraphWrapper() {
+		this.graph = new Graph<String, String>();
+	}
+	public void addNode(String nodeInfo) {
+		this.graph.addNode(nodeInfo);
+	}
+	public void addEdge(String sourceInfo, String destinationInfo, String labelInfo) {
+		Edge<String, String> label = new Edge<String, String>(sourceInfo, destinationInfo, labelInfo);
+		this.graph.addEdge(label);
+	}
+	public Iterator<String> listNodes() {
+		LinkedList<String> nodesList = this.graph.getNodes();
+		Collections.sort(nodesList);
+		return nodesList.iterator();
+	}
+	public Iterator<String> listChildren(String nodeInfo) {
+		LinkedList<Edge<String, String>> children = this.graph.getChildren(nodeInfo);
+		LinkedList<String> children2 = new LinkedList<String>();
+		
+		for (Edge<String, String> i: children) {
+			children2.add(i.getEnd() + "(" + i.getLabel() + ")");
+		}
+		
+		Collections.sort(children2);
+		return children2.iterator();
+	}
+	
+	public Iterator<String> listChildren(String parentNode){
+        LinkedList<Edge<String,String>> data1=this.g.getChildren(parentNode);
+        LinkedList<String> data2=new LinkedList<String>();
+        for(Edge<String,String> i : data1){
+            data2.add(i.getEnd()+"("+i.getLabel()+")");
+        }
+        Collections.sort(data2);
+        return data2.iterator();
+    }
+	
+	/*
+
+    public Iterator<String> listChildren(String parentNode){
+        LinkedList<Edge<String,String>> data1=this.g.getChildren(parentNode);
+        LinkedList<String> data2=new LinkedList<String>();
+        for(Edge<String,String> i : data1){
+            data2.add(i.getEnd()+"("+i.getLabel()+")");
+        }
+        Collections.sort(data2);
+        return data2.iterator();
+    }
+   }
+   */
+}
+
+
+
+
